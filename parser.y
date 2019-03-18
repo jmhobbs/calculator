@@ -7,23 +7,66 @@ func setResult(l yyLexer, r Result) {
 %}
 
 %union{
-  integer int
+  int int
+  byte byte
+  operation Operation
+  operations []Operation
 }
 
-%token <integer> Integer
+%token <int> Integer
 
 %token LexError
 
-%token Addition
-%token Subtraction
-%token Multiplication
-%token Divison
+%token ADDITION
+%token SUBTRACTION
+%token MULTIPLICATION
+%token DIVISION
+
+%type <operation> operation
+%type <operations> operations
+%type <byte> operator ADDITION SUBTRACTION MULTIPLICATION DIVISION
 
 %start result
 
 %%
 
-result:
+result: operations
 {
-  setResult(yylex, Result{})
+  setResult(yylex, Result{$1})
+}
+
+operations: operation
+{
+  $$ = []Operation{$1}
+}
+          | operations operation
+{
+  $1 = append($1, $2)
+  $$ = $1
+}
+
+operation: operator Integer
+{
+  $$ = Operation{$2, $1}
+}
+         | Integer
+{
+  $$ = Operation{$1, 0}
+}
+
+operator: ADDITION
+{
+  $$ = '+'
+}
+        | SUBTRACTION
+{
+  $$ = '-'
+}
+        | MULTIPLICATION
+{
+  $$ = '*'
+}
+        | DIVISION
+{
+  $$ = '/'
 }
