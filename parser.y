@@ -7,7 +7,17 @@ func setResult(l yyLexer, r Result) {
 %}
 
 %union{
+  integer int
 }
+
+%token <integer> Integer
+
+%token LexError
+
+%token Addition
+%token Subtraction
+%token Multiplication
+%token Divison
 
 %start result
 
