@@ -41,7 +41,7 @@ func TestLexer(t *testing.T) {
 			tokens []int
 		)
 
-		l := &lexer{input: []byte(tc.input)}
+		l := newLexer([]byte(tc.input))
 		for {
 			token = l.Lex(&lval)
 			if token == 0 {
