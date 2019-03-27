@@ -1,0 +1,15 @@
+language: go
+
+env:
+  - GO111MODULE=on
+
+before_install:
+  - go get -u modernc.org/goyacc
+  - go get -u modernc.org/golex
+  - go generate
+
+script:
+  - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
